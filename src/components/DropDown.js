@@ -1,12 +1,13 @@
 // DropdownComponent.js
 // src : https://www.w3schools.com/howto/tryit.asp?filename=tryhow_css_js_dropdown_filter
-// Temporairement j'ai un tableau avec des items dedans.
+// Temporairement juste pour l'intégration en argument de fonction je passe un tableau avec des items dedans.
+// barre de recherche filtre des tags peut rester ici
 
 export function createDropdownComponent(buttonLabel = "Dropdown", links = []) {
   const dropdownContainer = document.createElement("div");
   dropdownContainer.className = "dropdown";
 
-  // Create dropdown button
+  // Créer le bouton dropdown
   const button = document.createElement("button");
   button.className = "dropbtn";
   button.style.borderRadius = "11px";
@@ -25,31 +26,32 @@ export function createDropdownComponent(buttonLabel = "Dropdown", links = []) {
     }
   });
 
-  // Create dropdown content
+  // Créer le contenu du dropdown
   const dropdownContent = document.createElement("div");
   dropdownContent.className = "dropdown-content";
 
-  // Create search input
+  // Crée un champ de recherche
   const input = document.createElement("input");
   input.type = "text";
   input.id = "myInput";
+
+  // Ajoute un événement pour filtrer les liens à chaque frappe
   input.addEventListener("keyup", () => {
-    const filter = input.value.toUpperCase();
-    const a = dropdownContent.getElementsByTagName("a");
+    const filter = input.value.toUpperCase(); // Récupère la saisie en majuscules
+    const a = dropdownContent.getElementsByTagName("a"); // Sélectionne tous les liens du menu déroulant
+
+    // Parcourt chaque lien pour vérifier s'il contient le texte recherché
     for (let i = 0; i < a.length; i++) {
       const txtValue = a[i].textContent || a[i].innerText;
-      if (txtValue.toUpperCase().indexOf(filter) > -1) {
-        a[i].style.display = "";
-      } else {
-        a[i].style.display = "none";
-      }
+      a[i].style.display =
+        txtValue.toUpperCase().indexOf(filter) > -1 ? "" : "none"; // Affiche ou masque le lien
     }
   });
 
-  // Append input to dropdown content
+  // Ajout de l'input de recherche au contenu
   dropdownContent.appendChild(input);
 
-  // Create dropdown links
+  // Créer la liste du dropdown
   links.forEach((linkText) => {
     const link = document.createElement("a");
     link.href = `#${linkText.toLowerCase()}`;
@@ -57,7 +59,7 @@ export function createDropdownComponent(buttonLabel = "Dropdown", links = []) {
     dropdownContent.appendChild(link);
   });
 
-  // Append button and content to dropdown container
+  // Ajouter le bouton et le contenu au conteneur déroulant
   dropdownContainer.appendChild(button);
   dropdownContainer.appendChild(dropdownContent);
 
