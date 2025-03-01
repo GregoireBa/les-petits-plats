@@ -1,9 +1,8 @@
-// DropdownComponent.js
-// src : https://www.w3schools.com/howto/tryit.asp?filename=tryhow_css_js_dropdown_filter
-// Temporairement juste pour l'intégration en argument de fonction je passe un tableau avec des items dedans.
-// barre de recherche filtre des tags peut rester ici
-
-export function createDropdownComponent(buttonLabel = "Dropdown", links = []) {
+export function createDropdownComponent(
+  buttonLabel = "Dropdown",
+  links = [],
+  onSelect
+) {
   const dropdownContainer = document.createElement("div");
   dropdownContainer.className = "dropdown";
 
@@ -12,56 +11,83 @@ export function createDropdownComponent(buttonLabel = "Dropdown", links = []) {
   button.className = "dropbtn";
   button.style.borderRadius = "11px";
   button.innerHTML = `${buttonLabel} <i class="fa-solid fa-chevron-down"></i>`;
-  button.addEventListener("click", () => {
-    dropdownContent.classList.toggle("show");
-    const icon = button.querySelector("i");
-    if (dropdownContent.classList.contains("show")) {
-      icon.classList.remove("fa-chevron-down");
-      icon.classList.add("fa-chevron-up");
-      button.style.borderRadius = "11px 11px 0 0";
-    } else {
-      icon.classList.remove("fa-chevron-up");
-      icon.classList.add("fa-chevron-down");
-      button.style.borderRadius = "11px";
-    }
-  });
 
   // Créer le contenu du dropdown
   const dropdownContent = document.createElement("div");
   dropdownContent.className = "dropdown-content";
 
-  // Crée un champ de recherche
+  // Ajouter un champ de recherche avec son style original
+  const containerInput = document.createElement("div");
+  containerInput.className = "container-input-search";
   const input = document.createElement("input");
   input.type = "text";
   input.id = "myInput";
+  input.className = "dropdown-search";
 
-  // Ajoute un événement pour filtrer les liens à chaque frappe
+  // Ajouter un conteneur pour les options
+  const optionsContainer = document.createElement("div");
+  optionsContainer.className = "dropdown-options";
+
+  containerInput.appendChild(input);
+  dropdownContent.appendChild(containerInput);
+  dropdownContent.appendChild(optionsContainer);
+
+  // Fonction pour mettre à jour la liste des options
+  function updateList(newLinks) {
+    optionsContainer.innerHTML = "";
+    newLinks.forEach((linkText) => {
+      const link = document.createElement("a");
+      link.href = `#${linkText.toLowerCase()}`;
+      link.innerText = linkText;
+      link.addEventListener("click", (event) => {
+        event.preventDefault();
+        onSelect(linkText, buttonLabel);
+        dropdownContent.classList.remove("show");
+      });
+      optionsContainer.appendChild(link);
+    });
+  }
+
+  // Fonction pour gérer l'ouverture/fermeture du dropdown
+  function attachDropdownEvent() {
+    button.addEventListener("click", () => {
+      dropdownContent.classList.toggle("show");
+      const icon = button.querySelector("i");
+      if (dropdownContent.classList.contains("show")) {
+        icon.classList.remove("fa-chevron-down");
+        icon.classList.add("fa-chevron-up");
+        button.style.borderRadius = "11px 11px 0 0";
+      } else {
+        icon.classList.remove("fa-chevron-up");
+        icon.classList.add("fa-chevron-down");
+        button.style.borderRadius = "11px";
+      }
+    });
+  }
+
+  // Filtrer les options en fonction de l'input
   input.addEventListener("keyup", () => {
-    const filter = input.value.toUpperCase(); // Récupère la saisie en majuscules
-    const a = dropdownContent.getElementsByTagName("a"); // Sélectionne tous les liens du menu déroulant
+    const filter = input.value.toUpperCase();
+    const items = optionsContainer.getElementsByTagName("a");
 
-    // Parcourt chaque lien pour vérifier s'il contient le texte recherché
-    for (let i = 0; i < a.length; i++) {
-      const txtValue = a[i].textContent || a[i].innerText;
-      a[i].style.display =
-        txtValue.toUpperCase().indexOf(filter) > -1 ? "" : "none"; // Affiche ou masque le lien
+    for (let i = 0; i < items.length; i++) {
+      const txtValue = items[i].textContent || items[i].innerText;
+      items[i].style.display = txtValue.toUpperCase().includes(filter)
+        ? ""
+        : "none";
     }
   });
 
-  // Ajout de l'input de recherche au contenu
-  dropdownContent.appendChild(input);
+  // Initialisation
+  updateList(links);
+  attachDropdownEvent();
 
-  // Créer la liste du dropdown
-  links.forEach((linkText) => {
-    const link = document.createElement("a");
-    link.href = `#${linkText.toLowerCase()}`;
-    link.innerText = linkText;
-    dropdownContent.appendChild(link);
-  });
-
-  // Ajouter le bouton et le contenu au conteneur déroulant
+  // Ajouter le bouton et le menu au container
   dropdownContainer.appendChild(button);
   dropdownContainer.appendChild(dropdownContent);
+
+  // Exposer updateList pour mise à jour dynamique
+  dropdownContainer.updateList = updateList;
 
   return dropdownContainer;
 }

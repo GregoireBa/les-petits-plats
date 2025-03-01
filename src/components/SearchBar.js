@@ -1,6 +1,6 @@
 // SearchBar.js
-import { searchRecipes } from "../modules/searchEngine.js";
 import { displayRecipes } from "../../main.js";
+import { Recipes } from "../modules/recipes.js";
 
 export function createSearchBar() {
   const searchContainer = document.createElement("div");
@@ -20,18 +20,18 @@ export function createSearchBar() {
 
   // Recherche en temps réel avec input et suppression avec keyup
   input.addEventListener("input", (e) => {
-    const results = searchRecipes(e.target.value);
+    const results = Recipes.searchRecipes(e.target.value);
     displayRecipes(results);
   });
 
   input.addEventListener("keyup", (e) => {
-    const results = searchRecipes(e.target.value);
+    const results = Recipes.searchRecipes(e.target.value);
     displayRecipes(results);
   });
 
   // Recherche au clic sur le bouton
   button.addEventListener("click", () => {
-    const results = searchRecipes(input.value);
+    const results = Recipes.searchRecipes(input.value);
     displayRecipes(results);
   });
 
