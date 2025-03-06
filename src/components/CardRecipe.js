@@ -33,7 +33,7 @@ export function CardRecipe(recipe) {
 
   cardRecipe.innerHTML = `
   <div class="container-card-recipe">
-    <div class="header-bg-card-recipe"><img src="/public/img-recipes/${recipe.image}" alt=""></div>
+    <div class="header-bg-card-recipe"><img src="/img-recipes/${recipe.image}" alt=""></div>
 
     <div class="content-card-recipe">
       <h2>${recipe.name}</h2>
