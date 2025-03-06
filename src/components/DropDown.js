@@ -1,3 +1,5 @@
+let openDropdown = null;
+
 export function createDropdownComponent(
   buttonLabel = "Dropdown",
   links = [],
@@ -43,6 +45,7 @@ export function createDropdownComponent(
         event.preventDefault();
         onSelect(linkText, buttonLabel);
         dropdownContent.classList.remove("show");
+        openDropdown = null;
       });
       optionsContainer.appendChild(link);
     });
@@ -51,7 +54,14 @@ export function createDropdownComponent(
   // Fonction pour gérer l'ouverture/fermeture du dropdown
   function attachDropdownEvent() {
     button.addEventListener("click", () => {
+      if (openDropdown && openDropdown !== dropdownContent) {
+        openDropdown.classList.remove("show");
+      }
       dropdownContent.classList.toggle("show");
+      openDropdown = dropdownContent.classList.contains("show")
+        ? dropdownContent
+        : null;
+
       const icon = button.querySelector("i");
       if (dropdownContent.classList.contains("show")) {
         icon.classList.remove("fa-chevron-down");

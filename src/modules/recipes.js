@@ -62,28 +62,30 @@ export const Recipes = {
     // Appliquer les tags actifs
     if (this.activeTags.length > 0) {
       filteredRecipes = filteredRecipes.filter((recipe) => {
-        return this.activeTags.every((tag) => {
-          if (tag.category === "Ingrédients") {
-            return recipe.ingredients.some(
-              (ingredient) =>
-                ingredient.ingredient.toLowerCase() === tag.label.toLowerCase()
-            );
-          }
-          if (tag.category === "Appareils") {
-            return recipe.appliance.toLowerCase() === tag.label.toLowerCase();
-          }
-          if (tag.category === "Ustensiles") {
-            return recipe.ustensils.some(
-              (ustensil) => ustensil.toLowerCase() === tag.label.toLowerCase()
-            );
-          }
-          return true;
-        });
+        return this.activeTags.every((tag) => this.filterByTag(recipe, tag));
       });
     }
 
     this.filtedRecipes = filteredRecipes;
     return this.filtedRecipes;
+  },
+
+  filterByTag: function (recipe, tag) {
+    switch (tag.category) {
+      case "Ingrédients":
+        return recipe.ingredients.some(
+          (ingredient) =>
+            ingredient.ingredient.toLowerCase() === tag.label.toLowerCase()
+        );
+      case "Appareils":
+        return recipe.appliance.toLowerCase() === tag.label.toLowerCase();
+      case "Ustensiles":
+        return recipe.ustensils.some(
+          (ustensil) => ustensil.toLowerCase() === tag.label.toLowerCase()
+        );
+      default:
+        return true;
+    }
   },
 };
 

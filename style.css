@@ -225,12 +225,25 @@ body {
 
 /* Tag Recipe */
 
+.tag-container {
+  display: flex;
+  gap: 5px;
+}
+
 .tag-recipe {
-  display: inline-block;
+  display: inline-flex;
   background-color: #ffd15b;
   color: black;
   padding: 5px 15px;
   border-radius: 14px;
-  font-size: 0.75rem;
-  margin-right: 10px;
+  font-size: 14px;
+  align-items: center;
+  gap: 20px;
+}
+
+.tag-close {
+  border: none;
+  background: none;
+  font-size: 20px;
+  font-weight: bold;
 }
