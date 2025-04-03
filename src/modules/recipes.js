@@ -46,7 +46,7 @@ export const Recipes = {
     let filteredRecipes = this.originalRecipes;
 
     // Appliquer la recherche texte
-    if (this.searchQuery.length >= 3) {
+    if (this.searchQuery && this.searchQuery.trim().length >= 3) {
       const lowerQuery = this.searchQuery.toLowerCase();
       filteredRecipes = filteredRecipes.filter((recipe) => {
         return (
